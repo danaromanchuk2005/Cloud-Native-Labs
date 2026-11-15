@@ -1,4 +1,7 @@
 node_modules/
 .DS_Store
+.env
 lab3/pipeline
 lab5/node-service/data/
+lab6/node-service/data/
+lab6/go-service/data/
