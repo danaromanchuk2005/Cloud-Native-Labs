@@ -1,3 +1,4 @@
 node_modules/
 .DS_Store
 lab3/pipeline
+lab5/node-service/data/
