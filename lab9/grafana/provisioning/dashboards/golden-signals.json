@@ -1,0 +1,104 @@
+{
+  "title": "Lab 9 — Four Golden Signals & Security Metrics",
+  "uid": "lab9-golden-signals",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-15m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Traffic — RPS by Service (Node.js vs Go)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sum by (job) (rate(http_request_duration_seconds_count[1m]))",
+          "legendFormat": "{{job}} RPS"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Errors — 5xx Error Rate (%)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sum by (job) (rate(http_request_duration_seconds_count{status=~\"5..\"}[1m])) / sum by (job) (rate(http_request_duration_seconds_count[1m])) * 100",
+          "legendFormat": "{{job}} 5xx %"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Latency — p50 / p95 / p99 (seconds)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum by (job, le) (rate(http_request_duration_seconds_bucket[1m])))",
+          "legendFormat": "{{job}} p50"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by (job, le) (rate(http_request_duration_seconds_bucket[1m])))",
+          "legendFormat": "{{job}} p95"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (job, le) (rate(http_request_duration_seconds_bucket[1m])))",
+          "legendFormat": "{{job}} p99"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Saturation — Node Event Loop Lag (s) & Go Goroutines",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "avg(node_eventloop_lag_seconds)",
+          "legendFormat": "Node.js Event Loop Lag (s)"
+        },
+        {
+          "expr": "go_goroutines",
+          "legendFormat": "Go Goroutines"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Security — Auth Failures (401/403 RPS)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sum by (status) (rate(http_request_duration_seconds_count{status=~\"401|403\"}[1m]))",
+          "legendFormat": "HTTP {{status}} RPS"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Security — Nginx Active & Dropped Connections (Rate Limit)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "nginx_connections_active",
+          "legendFormat": "Nginx Active Connections"
+        },
+        {
+          "expr": "rate(nginx_http_requests_total[1m])",
+          "legendFormat": "Nginx Total RPS"
+        }
+      ]
+    }
+  ]
+}

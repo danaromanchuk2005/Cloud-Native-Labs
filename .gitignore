@@ -1,11 +1,17 @@
-cat << 'EOF' > ~/Projects/Cloud-Native-Labs/.gitignore
 node_modules/
 .DS_Store
 .env
+.env.*
+!.env.example
 dist/
 bin/
+nginx/certs/
 lab3/pipeline
 lab5/node-service/data/
 lab6/node-service/data/
 lab7/node-service/data/
-EOF
+lab8/node-service/data/
+.env
+**/node_modules/
+**/*.key
+**/*.pem
