@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+nginx/certs/*.key
+nginx/certs/*.crt
+nginx/certs/*.pem
+node_modules/
+dist/
+bin/
+.DS_Store
