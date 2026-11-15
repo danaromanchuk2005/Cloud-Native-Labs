@@ -1,7 +1,11 @@
+cat << 'EOF' > ~/Projects/Cloud-Native-Labs/.gitignore
 node_modules/
 .DS_Store
 .env
+dist/
+bin/
 lab3/pipeline
 lab5/node-service/data/
 lab6/node-service/data/
-lab6/go-service/data/
+lab7/node-service/data/
+EOF
